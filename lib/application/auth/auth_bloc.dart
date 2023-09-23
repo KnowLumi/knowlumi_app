@@ -1,7 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:knowlumi_app/domain/auth/lumi_user.dart';
 
+import '../../domain/auth/auth_failures.dart';
+import '../../domain/auth/lumi_user.dart';
 import '../../domain/auth/i_auth_repo.dart';
 
 part 'auth_event.dart';
@@ -18,39 +19,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(currentUser.fold(
         () => const AuthState.unAuthenticated(),
-        (user) {
-          if (user is NotRegistered) {
-            return const AuthState.toRegister();
-          } else {
-            return AuthState.success(
-              role: getUserType(user),
-              user: user,
-            );
-          }
-        },
+        (user) => _switchUserState(user),
       ));
     });
+
     on<SignInUsingGoogle>((event, emit) async {
       emit(const Loading());
       final failureOrUser = await _authRepo.signInUsingGoogle();
 
       emit(failureOrUser.fold(
-        (failure) => failure.when(
-          serverError: () => const AuthState.failure("message"),
-          cancelledByUser: () => const AuthState.failure("message"),
-        ),
-        (user) {
-          if (user is NotRegistered) {
-            return const AuthState.toRegister();
-          } else {
-            return AuthState.success(
-              role: getUserType(user),
-              user: user,
-            );
-          }
+        (failure) => switch (failure) {
+          ServerError() => const AuthState.failure("message"),
+          CancelledByUser() => const AuthState.failure("message"),
         },
+        (user) => _switchUserState(user),
       ));
     });
+
     on<RegisterUser>((event, emit) async {
       emit(const Loading());
 
@@ -58,27 +43,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(
         failureOrUser.fold(
-          (failure) => failure.maybeWhen(
-            orElse: () => const AuthState.failure("message"),
-          ),
-          (user) => AuthState.success(
-            role: event.role,
-            user: user,
-          ),
+          (failure) => switch (failure) {
+            ServerError() ||
+            CancelledByUser() =>
+              const AuthState.failure("message"),
+          },
+          (user) => _switchUserState(user),
         ),
       );
     });
+
     on<SignOut>((event, emit) async {
       await _authRepo.signOut();
       emit(const AuthState.unAuthenticated());
     });
   }
 
-  UserType getUserType(LumiUser lumiUser) {
-    if (lumiUser is LumiCreator) {
-      return UserType.creator;
-    } else {
-      return UserType.student;
-    }
+  AuthState _switchUserState(LumiUser user) {
+    return switch (user) {
+      NotRegistered() => const AuthState.toRegister(),
+      LumiCreator creator => AuthState.creator(user: creator),
+      LumiStudent student => AuthState.student(user: student)
+    };
   }
 }

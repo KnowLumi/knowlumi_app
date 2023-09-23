@@ -5,19 +5,18 @@ part 'lumi_user.freezed.dart';
 enum UserType {
   creator,
   student,
-  admin,
 }
 
 @freezed
 class UserData with _$UserData {
   const factory UserData({
     required String uid,
-    required UserType userType,
+    required UserType role,
   }) = _UserData;
 }
 
 @freezed
-class LumiUser with _$LumiUser {
+sealed class LumiUser with _$LumiUser {
   const factory LumiUser.notRegistered() = NotRegistered;
 
   const factory LumiUser.lumiCreator({
@@ -25,7 +24,7 @@ class LumiUser with _$LumiUser {
     required String firstName,
     required String lastName,
     required String email,
-    required int phoneNumber,
+    required String phoneNumber,
     required String employmentType,
     required String about,
     required String photoUrl,
@@ -33,8 +32,9 @@ class LumiUser with _$LumiUser {
     required String instagramUrl,
     required String linkedInUrl,
     required String youtubeUrl,
-    String? refId,
+    required String refId,
     required int tmsCreate,
+    required int tmsUpdate,
   }) = LumiCreator;
 
   const factory LumiUser.lumiStudent({
@@ -42,14 +42,15 @@ class LumiUser with _$LumiUser {
     required String firstName,
     required String lastName,
     required String email,
-    required int phoneNumber,
+    required String phoneNumber,
     required String photoUrl,
-    String? refId,
+    required String refId,
     required List<String> interestedTopics,
     required List<String> wishListedCourses,
     required List<ApprovedCourse> accessibleCourses,
     required List<EnrolledCourse> enrolledCourses,
     required int tmsCreate,
+    required int tmsUpdate,
   }) = LumiStudent;
 }
 
@@ -58,7 +59,7 @@ class ApprovedCourse with _$ApprovedCourse {
   const factory ApprovedCourse({
     required String courseId,
     required String accessId,
-    String? refId,
+    required String refId,
   }) = _ApprovedCourse;
 }
 
