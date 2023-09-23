@@ -2,12 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../domain/auth/auth_failures.dart';
 import '../../domain/auth/i_auth_repo.dart';
 import '../../domain/auth/lumi_user.dart';
 import 'lumi_user_dto.dart';
 
+@LazySingleton(as: IAuthRepo)
 class AuthRepository implements IAuthRepo {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;

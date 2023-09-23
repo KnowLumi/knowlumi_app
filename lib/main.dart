@@ -1,8 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:knowlumi_app/application/auth/auth_bloc.dart';
+import 'package:knowlumi_app/injection.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  configureDependencies();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -12,14 +16,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Knowlumi App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<AuthBloc>()
+            ..add(
+              const AuthEvent.authCheckRequested(),
+            ),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Knowlumi App',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const HomePage(),
       ),
-      home: const HomePage(),
     );
   }
 }
