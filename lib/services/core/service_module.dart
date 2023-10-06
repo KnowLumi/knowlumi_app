@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
 
 @module
-abstract class InjectableModule {
+abstract class ServiceModule {
   @lazySingleton
   GoogleSignIn get googleSignIn => GoogleSignIn();
   @lazySingleton

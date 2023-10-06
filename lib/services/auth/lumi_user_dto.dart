@@ -5,12 +5,14 @@ import '../../domain/auth/lumi_user.dart';
 part 'lumi_user_dto.freezed.dart';
 part 'lumi_user_dto.g.dart';
 
-UserType getUserType(String role) {
-  if (role == 'creator') {
-    return UserType.creator;
-  } else // role == 'student'
-  {
-    return UserType.student;
+UserType? getUserType(String? role) {
+  switch (role) {
+    case "creator":
+      return UserType.creator;
+    case "student":
+      return UserType.student;
+    default:
+      return null;
   }
 }
 
@@ -19,8 +21,8 @@ class UserDataDto with _$UserDataDto {
   const UserDataDto._();
 
   const factory UserDataDto({
-    required String uid,
-    required String role,
+    String? uid,
+    String? role,
   }) = _UserDataDto;
 
   UserData toDomain() => UserData(
@@ -37,10 +39,10 @@ class LumiCreatorDto with _$LumiCreatorDto {
   const LumiCreatorDto._();
 
   const factory LumiCreatorDto({
-    required String id,
-    required String firstName,
+    String? id,
+    String? firstName,
     String? lastName,
-    required String email,
+    String? email,
     String? phoneNumber,
     String? employmentType,
     String? about,
@@ -50,8 +52,8 @@ class LumiCreatorDto with _$LumiCreatorDto {
     String? linkedInUrl,
     String? youtubeUrl,
     String? refId,
-    required int tmsCreate,
-    required int tmsUpdate,
+    int? tmsCreate,
+    int? tmsUpdate,
   }) = _LumiCreatorDto;
 
   LumiUser toDomain() => LumiUser.lumiCreator(
@@ -81,19 +83,19 @@ class LumiStudentDto with _$LumiStudentDto {
   const LumiStudentDto._();
 
   const factory LumiStudentDto({
-    required String id,
-    required String firstName,
+    String? id,
+    String? firstName,
     String? lastName,
-    required String email,
+    String? email,
     String? phoneNumber,
     String? photoUrl,
     String? refId,
-    required List<String> interestedTopics,
+    List<String>? interestedTopics,
     List<String>? wishListedCourses,
     List<ApprovedCourseDto>? accessibleCourses,
     List<EnrolledCourseDto>? enrolledCourses,
-    required int tmsCreate,
-    required int tmsUpdate,
+    int? tmsCreate,
+    int? tmsUpdate,
   }) = _LumiStudentDto;
 
   LumiUser toDomain() => LumiUser.lumiStudent(
@@ -127,7 +129,7 @@ class ApprovedCourseDto with _$ApprovedCourseDto {
   const ApprovedCourseDto._();
 
   const factory ApprovedCourseDto({
-    required String courseId,
+    String? courseId,
     String? accessId,
     String? refId,
   }) = _ApprovedCourseDto;
@@ -147,8 +149,8 @@ class EnrolledCourseDto with _$EnrolledCourseDto {
   const EnrolledCourseDto._();
 
   const factory EnrolledCourseDto({
-    required String courseId,
-    required String tmsEnroll,
+    String? courseId,
+    String? tmsEnroll,
   }) = _EnrolledCourseDto;
 
   EnrolledCourse toDomain() => EnrolledCourse(

@@ -1,14 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:knowlumi_app/presentation/core/start_up.dart';
 
+import 'presentation/core/start_up.dart';
 import 'application/auth/auth_bloc.dart';
 import 'injection.dart';
+import 'init_dependencies.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
+  await initDependencies();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
