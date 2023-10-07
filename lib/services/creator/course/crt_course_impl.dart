@@ -4,10 +4,10 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
-import 'package:knowlumi_app/domain/course/lumi_course_type_wrapper.dart';
-import 'package:knowlumi_app/services/course_dto/lumi_course_dto.dart';
-import 'package:knowlumi_app/services/course_dto/lumi_curriculum_dto.dart';
 
+import '../../../domain/course/lumi_course_type_wrapper.dart';
+import '../../course_dto/lumi_course_dto.dart';
+import '../../course_dto/lumi_curriculum_dto.dart';
 import '../../../core/utils/cache/course_pref.dart';
 import '../../../domain/course/lumi_course.dart';
 import '../../../domain/course/lumi_curriculum.dart';

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:knowlumi_app/domain/course/lumi_course.dart';
-import 'package:knowlumi_app/domain/course/lumi_curriculum.dart';
+
+import 'lumi_course.dart';
+import 'lumi_curriculum.dart';
 
 part 'lumi_course_type_wrapper.freezed.dart';
 

@@ -1,12 +1,17 @@
-import 'dart:io';
+import 'package:dartz/dartz.dart';
+import 'package:file_picker/file_picker.dart';
 
-import 'package:knowlumi_app/domain/upload/file_data.dart';
-import 'package:knowlumi_app/domain/upload/upload_data.dart';
+import '../course/lumi_curriculum.dart';
+import 'file_data.dart';
+import 'upload_data.dart';
+import 'file_pick_failure.dart';
 
 abstract interface class IUploadRepo {
-  Future<FileData> pickContent(ContentType contentType);
+  Future<Either<FilePickFailure, Option<FileData>>> pickContent(
+    ContentType contentType,
+  );
   Stream<UploadData> uploadContent({
     required ContentType type,
-    required File file,
+    required PlatformFile file,
   });
 }

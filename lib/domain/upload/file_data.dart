@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:file_picker/file_picker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'file_data.freezed.dart';
@@ -9,6 +8,6 @@ class FileData with _$FileData {
   const factory FileData({
     required String fileName,
     required String fileSize,
-    required File file,
+    required PlatformFile file,
   }) = _FileData;
 }

@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:knowlumi_app/domain/course/lumi_course_type_wrapper.dart';
 
+import '../../../domain/course/lumi_course_type_wrapper.dart';
 import '../../../domain/course/lumi_course.dart';
 import '../../../domain/course/lumi_curriculum.dart';
 import '../../../domain/creator/course/crt_course_failures.dart';

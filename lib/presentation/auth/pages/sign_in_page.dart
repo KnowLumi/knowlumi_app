@@ -1,8 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/routes/app_router.dart';
 import '../../../application/auth/auth_bloc.dart';
 
+@RoutePage()
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
@@ -12,8 +15,8 @@ class SignInPage extends StatelessWidget {
       listener: (context, state) {
         state.maybeWhen(
           orElse: () {},
-          //todo: Nav to register Page
-          toRegister: () => null,
+
+          toRegister: () => context.router.replace(const RegisterRoute()),
           //todo: Handle signIn Failure
           failure: (message) => null,
         );

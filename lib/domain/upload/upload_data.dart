@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'upload_failure.dart';
+
 part 'upload_data.freezed.dart';
 
 @freezed
-class UploadData with _$UploadData {
-  const factory UploadData({
-    int? progress,
-    String? uploadedUrl,
-  }) = _UploadData;
+sealed class UploadData with _$UploadData {
+  const factory UploadData.uploading(double progress) = Progress;
+  const factory UploadData.uploaded(String url) = Url;
+  const factory UploadData.error(UploadFailure error) = Error;
 }

@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../core/utils/date_time_utils.dart';
 import '../../domain/auth/auth_failures.dart';
 import '../../domain/auth/i_auth_repo.dart';
 import '../../domain/auth/lumi_user.dart';
@@ -40,10 +41,10 @@ class AuthRepository implements IAuthRepo {
           final lumiCreator = LumiCreatorDto(
             id: userId,
             firstName: user.displayName ?? "Guest",
-            email: user.email ?? "",
-            photoUrl: user.photoURL ?? "",
-            tmsCreate: DateTime.now().millisecondsSinceEpoch,
-            tmsUpdate: DateTime.now().millisecondsSinceEpoch,
+            email: user.email,
+            photoUrl: user.photoURL,
+            tmsCreate: currentTms,
+            tmsUpdate: currentTms,
           );
 
           await _firestore.collection("LumiCreators").doc(userId).set(
@@ -54,10 +55,10 @@ class AuthRepository implements IAuthRepo {
           final lumiStudent = LumiStudentDto(
             id: userId,
             firstName: user.displayName ?? "Guest",
-            email: user.email ?? "",
-            photoUrl: user.photoURL ?? "",
-            tmsCreate: DateTime.now().millisecondsSinceEpoch,
-            tmsUpdate: DateTime.now().millisecondsSinceEpoch,
+            email: user.email,
+            photoUrl: user.photoURL,
+            tmsCreate: currentTms,
+            tmsUpdate: currentTms,
             interestedTopics: interestedTopics ?? [],
           );
           await _firestore.collection("LumiStudents").doc(userId).set(
@@ -114,14 +115,14 @@ class AuthRepository implements IAuthRepo {
             await _firestore.collection('LumiCreators').doc(userId).get();
 
         return LumiCreatorDto.fromJson(lumiUserDocSnap.data()!).toDomain();
-      } else {
+      } else // userDataDoc['role'] == 'student'
+      {
         lumiUserDocSnap =
             await _firestore.collection('LumiStudents').doc(userId).get();
 
         return LumiStudentDto.fromJson(lumiUserDocSnap.data()!).toDomain();
       }
-    } else // userDataDoc['role'] == 'student'
-    {
+    } else {
       await _firestore.collection('LumiUserData').doc(userId).set(
             UserDataDto(
               uid: userId,

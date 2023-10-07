@@ -41,7 +41,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<RegisterUser>((event, emit) async {
       emit(const Loading());
 
-      final failureOrUser = await _authRepo.registerUser(role: event.role);
+      final failureOrUser = await _authRepo.registerUser(
+        role: event.role,
+        interestedTopics: event.interestedTopics,
+      );
 
       emit(
         failureOrUser.fold(
