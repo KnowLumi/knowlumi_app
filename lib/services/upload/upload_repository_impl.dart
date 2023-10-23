@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:injectable/injectable.dart';
 import 'package:mime/mime.dart';
 
 import '../../domain/upload/upload_failure.dart';
@@ -11,6 +12,7 @@ import '../../domain/upload/file_pick_failure.dart';
 import '../../domain/upload/i_upload_repo.dart';
 import '../../domain/upload/upload_data.dart';
 
+@LazySingleton(as: IUploadRepo)
 class UploadRepository implements IUploadRepo {
   @override
   Future<Either<FilePickFailure, Option<FileData>>> pickContent(
@@ -79,63 +81,63 @@ class UploadRepository implements IUploadRepo {
     final request = http.MultipartRequest('POST', uri);
 
     late final http.MultipartFile multipartFile;
-
-    try {
-      switch (type) {
-        case ContentType.video:
-          final fileReadStream = file.readStream;
-          if (fileReadStream == null) {
-            throw Exception('Cannot read file from null stream');
-          }
-          final stream = http.ByteStream(fileReadStream);
-
-          multipartFile = http.MultipartFile(
-            'file',
-            stream,
-            file.size,
-            filename: file.name,
-            contentType: contentType,
-          );
-          break;
-        case ContentType.image:
-          multipartFile = await http.MultipartFile.fromPath(
-            'image',
-            filePath!,
-            contentType: contentType,
-          );
-          break;
-        case ContentType.pdf:
-          multipartFile = await http.MultipartFile.fromPath(
-            'pdf',
-            filePath!,
-            contentType: contentType,
-          );
-          break;
-      }
-
-      request.files.add(multipartFile);
-
-      final response = await request.send();
-
-      final contentLength = response.contentLength ?? file.size;
-
-      int uploadedBytes = 0;
-
-      await for (List<int> chunk in response.stream) {
-        uploadedBytes += chunk.length;
-        final progress = (uploadedBytes / contentLength) * 100;
-        yield UploadData.uploading(progress);
-
-        if (response.statusCode == 200) {
-          final responseObj = await http.Response.fromStream(response);
-          // todo: Extract url from response
-          yield UploadData.uploaded(responseObj.body);
-        } else {
-          yield const UploadData.error(UploadFailure());
-        }
-      }
-    } catch (e) {
-      yield const UploadData.error(UploadFailure());
-    }
+    //
+    // try {
+    //   switch (type) {
+    //     case ContentType.video:
+    //       final fileReadStream = file.readStream;
+    //       if (fileReadStream == null) {
+    //         throw Exception('Cannot read file from null stream');
+    //       }
+    //       final stream = http.ByteStream(fileReadStream);
+    //
+    //       multipartFile = http.MultipartFile(
+    //         'file',
+    //         stream,
+    //         file.size,
+    //         filename: file.name,
+    //         contentType: contentType,
+    //       );
+    //       break;
+    //     case ContentType.image:
+    //       multipartFile = await http.MultipartFile.fromPath(
+    //         'image',
+    //         filePath!,
+    //         contentType: contentType,
+    //       );
+    //       break;
+    //     case ContentType.pdf:
+    //       multipartFile = await http.MultipartFile.fromPath(
+    //         'pdf',
+    //         filePath!,
+    //         contentType: contentType,
+    //       );
+    //       break;
+    //   }
+    //
+    //   request.files.add(multipartFile);
+    //
+    //   final response = await request.send();
+    //
+    //   final contentLength = response.contentLength ?? file.size;
+    //
+    //   int uploadedBytes = 0;
+    //
+    //   await for (List<int> chunk in response.stream) {
+    //     uploadedBytes += chunk.length;
+    //     final progress = (uploadedBytes / contentLength) * 100;
+    //     yield UploadData.uploading(progress);
+    //
+    //     if (response.statusCode == 200) {
+    //       final responseObj = await http.Response.fromStream(response);
+    //       // todo: Extract url from response
+    //       yield UploadData.uploaded(responseObj.body);
+    //     } else {
+    //       yield const UploadData.error(UploadFailure());
+    //     }
+    //   }
+    // } catch (e) {
+    //   yield const UploadData.error(UploadFailure());
+    // }
   }
 }

@@ -2,11 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../creator/home/pages/creator_home_page.dart';
-import '../../student/home/pages/student_home_page.dart';
+import '../../creator/creator_main_page.dart';
 import '../../../application/auth/auth_bloc.dart';
 import '../../auth/pages/register_page.dart';
 import '../../auth/pages/sign_in_page.dart';
+import '../../student/student_main_page.dart';
 
 @RoutePage()
 class StartUpPage extends StatelessWidget {
@@ -34,9 +34,13 @@ class StartUpPage extends StatelessWidget {
             ),
           UnAuthenticated() => const SignInPage(),
           ToRegister() => const RegisterPage(),
-          Creator(user: var creator) => CreatorHomePage(creator: creator),
-          Student(user: var student) => StudentHomePage(student: student),
-          Failure() => const Scaffold(),
+          Creator(user: var creator) => CreatorMainPage(creator: creator),
+          Student(user: var student) => StudentMainPage(student: student),
+          Failure() => const Scaffold(
+              body: Center(
+                child: Text("Failure Page"),
+              ),
+            ),
         };
       },
     );

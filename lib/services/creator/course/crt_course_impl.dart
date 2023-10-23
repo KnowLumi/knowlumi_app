@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,24 +26,34 @@ class CrtCourseRepository implements ICrtCourseRepo {
 
   CrtCourseRepository(this._httpClient, this._courseCache, this._firebaseAuth);
 
+  List<LumiCourseTypeWrapper> _allCourses = [];
+
   String get creatorId => _firebaseAuth.currentUser!.uid;
 
   @override
   Future<Either<CrtCourseFailure, List<LumiCourseTypeWrapper>>>
       getAllCourses() async {
-    final cacheData = _courseCache.getAllCourses();
+    // await _courseCache.clean();
+    // final str = await _firebaseAuth.currentUser!.getIdToken();
+    // print(str);
+    // log(str!);
+    // final cacheData = _courseCache.getAllCourses();
+    //
+    // if (cacheData.$1.isNotEmpty && cacheData.$2.isNotEmpty) {
+    //   final cachedCoursesMap = cacheData.$1;
+    //   final cachedCurrMap = cacheData.$2;
+    //
+    //   final listOfCoursesAndCurr = _mapCourseCurrMapsToList(
+    //     coursesMap: cachedCoursesMap,
+    //     curriculumMap: cachedCurrMap,
+    //   );
+    //
+    //   return right(listOfCoursesAndCurr);
+    // }
+    //
+    // return right(<LumiCourseTypeWrapper>[]);
 
-    if (cacheData.$1.isNotEmpty && cacheData.$2.isNotEmpty) {
-      final cachedCoursesMap = cacheData.$1;
-      final cachedCurrMap = cacheData.$2;
-
-      final listOfCoursesAndCurr = _mapCourseCurrMapsToList(
-        coursesMap: cachedCoursesMap,
-        curriculumMap: cachedCurrMap,
-      );
-
-      return right(listOfCoursesAndCurr);
-    }
+    return right(_allCourses);
 
     try {
       final response = await _httpClient.get(
@@ -109,11 +120,45 @@ class CrtCourseRepository implements ICrtCourseRepo {
   }
 
   @override
-  Future<Option<CrtCourseFailure>> createCourse({
+  Future<Either<CrtCourseFailure, LumiCourseTypeWrapper>> createCourse({
     required LumiCourse course,
     required LumiCurriculum curriculum,
   }) async {
     try {
+      // ! Test //
+      LumiCourseDto c = LumiCourseDto.fromDomain(course).copyWith(
+        id: "id123",
+        curriculumId: "123id",
+        creatorId: _firebaseAuth.currentUser!.uid,
+      );
+
+      LumiCurriculumDto curr =
+          LumiCurriculumDto.fromDomain(curriculum).copyWith(
+        id: "123id",
+      );
+
+      final wrapper = LumiCourseTypeWrapper(
+        course: c.toDomain(),
+        curriculum: curr.toDomain(),
+      );
+
+      _allCourses.add(wrapper);
+
+      return right(wrapper);
+
+      // await _courseCache.createCourse(
+      //   newCourse: c.toJson(),
+      //   newCurriculum: curr.toJson(),
+      // );
+      //
+      // return right(
+      //   LumiCourseTypeWrapper(
+      //     course: c.toDomain(),
+      //     curriculum: curr.toDomain(),
+      //   ),
+      // );
+      // ! Test //
+
       final response = await _httpClient.post(
         Uri.parse("uri"),
         headers: {},
@@ -131,12 +176,13 @@ class CrtCourseRepository implements ICrtCourseRepo {
           newCurriculum: curriculumMap,
         );
 
-        return none();
+        // return none();
       } else {
-        return some(const CrtCourseFailure.serverFailure());
+        return left(const CrtCourseFailure.serverFailure());
       }
     } catch (e) {
-      return some(const CrtCourseFailure.serverFailure());
+      print(e.toString());
+      return left(const CrtCourseFailure.serverFailure());
     }
   }
 
@@ -146,6 +192,20 @@ class CrtCourseRepository implements ICrtCourseRepo {
     LumiCurriculum? curriculum,
   }) async {
     try {
+      // ! Test //
+      await _courseCache.updateCourse(
+        courseId: course?.id,
+        updatedCourse:
+            course != null ? LumiCourseDto.fromDomain(course).toJson() : null,
+        curriculumId: curriculum?.id,
+        updatedCurriculum: curriculum != null
+            ? LumiCurriculumDto.fromDomain(curriculum).toJson()
+            : null,
+      );
+
+      return none();
+      // ! Test //
+
       final response = await _httpClient.put(
         Uri.parse("uri"),
         headers: {},
@@ -180,6 +240,15 @@ class CrtCourseRepository implements ICrtCourseRepo {
     required String curriculumId,
   }) async {
     try {
+      // ! Test //
+      await _courseCache.deleteCourse(
+        courseId: courseId,
+        curriculumId: curriculumId,
+      );
+
+      return none();
+      //! Test //
+
       final response = await _httpClient.delete(
         Uri.parse("uri"),
         headers: {},

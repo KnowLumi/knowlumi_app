@@ -22,6 +22,7 @@ ContentType? getContentType(String? type) {
 class LumiCurriculumDto with _$LumiCurriculumDto {
   const LumiCurriculumDto._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory LumiCurriculumDto({
     String? id,
     List<SectionDto>? sections,
@@ -57,6 +58,7 @@ class LumiCurriculumDto with _$LumiCurriculumDto {
 class SectionDto with _$SectionDto {
   const SectionDto._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory SectionDto({
     int? templateId,
     String? title,

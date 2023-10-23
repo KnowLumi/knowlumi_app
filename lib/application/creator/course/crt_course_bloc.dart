@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../core/utils/date_time_utils.dart';
 import '../../../domain/course/lumi_course_type_wrapper.dart';
 import '../../../domain/course/lumi_course.dart';
 import '../../../domain/course/lumi_curriculum.dart';
@@ -41,6 +42,7 @@ class CrtCourseBloc extends Bloc<CrtCourseEvent, CrtCourseState> {
     on<CreateCourse>((event, emit) async {
       emit(const Loading());
 
+      print("Creating");
       final initialCurriculum = LumiCurriculum(
         sections: [
           const Section(
@@ -58,21 +60,23 @@ class CrtCourseBloc extends Bloc<CrtCourseEvent, CrtCourseState> {
             ],
           ),
         ],
-        tmsCreate: DateTime.now().millisecondsSinceEpoch,
-        tmsUpdate: DateTime.now().millisecondsSinceEpoch,
+        tmsCreate: currentTms,
+        tmsUpdate: currentTms,
       );
 
+      print("Calling Repo");
       final failureOrNone = await _courseRepo.createCourse(
         course: event.course,
         curriculum: initialCurriculum,
       );
 
+      print("Emitting Final");
       emit(
         failureOrNone.fold(
-          () => const CrtCourseState.created(),
           (failure) => switch (failure) {
             ServerFailure() => const CrtCourseState.failure("Failed to create"),
           },
+          (courseWrapper) => CrtCourseState.created(courseWrapper),
         ),
       );
     });

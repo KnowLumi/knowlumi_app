@@ -7,15 +7,16 @@ class CoursePref {
   static const _courseKey = 'courses';
   static const _curriculumKey = 'curriculums';
 
-  final Box<dynamic> _box;
+  final Box<List<Map<String, dynamic>>> _box;
   CoursePref._(this._box);
 
   static Future<void> init() async {
-    final box = await Hive.openBox<dynamic>(_courseBox);
+    final box = await Hive.openBox<List<Map<String, dynamic>>>(_courseBox);
     _instance = CoursePref._(box);
   }
 
   static CoursePref get instance => _instance;
+  Future clean() async => await _box.clear();
 
   List<Map<String, dynamic>> _getValue(dynamic key) =>
       _box.get(key, defaultValue: []) as List<Map<String, dynamic>>;
@@ -38,6 +39,8 @@ class CoursePref {
     required Map<String, dynamic> newCourse,
     required Map<String, dynamic> newCurriculum,
   }) async {
+    print("creating --> $newCourse : $newCurriculum");
+
     await Future.wait([
       _createHelper(_courseKey, newCourse),
       _createHelper(_curriculumKey, newCurriculum),
@@ -51,6 +54,8 @@ class CoursePref {
     final allElements = _getValue(key);
 
     allElements.add(newElement);
+
+    print("all lmns --> $allElements");
     await _setValue(key, allElements);
   }
 

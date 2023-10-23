@@ -7,7 +7,7 @@ import 'crt_course_failures.dart';
 
 abstract interface class ICrtCourseRepo {
   Future<Either<CrtCourseFailure, List<LumiCourseTypeWrapper>>> getAllCourses();
-  Future<Option<CrtCourseFailure>> createCourse({
+  Future<Either<CrtCourseFailure, LumiCourseTypeWrapper>> createCourse({
     required LumiCourse course,
     required LumiCurriculum curriculum,
   });

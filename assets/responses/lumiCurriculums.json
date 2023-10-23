@@ -1,0 +1,25 @@
+{
+    "lumiCurriculums": [
+        {
+            "id": "123id",
+            "tmsCreate": 1696870444000,
+            "tmsUpdate": 1696870444000,
+            "sections": [
+                {
+                    "templateId": 0,
+                    "title": "Title",
+                    "subtitle": "Subtitle",
+                    "lessons": [
+                        {
+                            "order": 0,
+                            "title": null,
+                            "description": null,
+                            "contentType": "image",
+                            "url": null
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

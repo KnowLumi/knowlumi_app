@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/auth/auth_bloc.dart';
+import '../../../application/creator/course/crt_course_bloc.dart';
+import '../../../application/upload/upload_bloc.dart';
 import '../../../injection.dart';
 import '../routes/app_router.dart';
 
@@ -19,6 +21,15 @@ class MyApp extends StatelessWidget {
             ..add(
               const AuthEvent.authCheckRequested(),
             ),
+        ),
+        BlocProvider(
+          create: (context) => getIt<CrtCourseBloc>()
+            ..add(
+              const CrtCourseEvent.fetchAllCourses(),
+            ),
+        ),
+        BlocProvider(
+          create: (context) => getIt<UploadBloc>(),
         ),
       ],
       child: MaterialApp.router(

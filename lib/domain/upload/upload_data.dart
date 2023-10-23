@@ -6,7 +6,7 @@ part 'upload_data.freezed.dart';
 
 @freezed
 sealed class UploadData with _$UploadData {
-  const factory UploadData.uploading(double progress) = Progress;
-  const factory UploadData.uploaded(String url) = Url;
+  const factory UploadData.uploading(double progress) = Uploading;
+  const factory UploadData.uploaded(String url) = Uploaded;
   const factory UploadData.error(UploadFailure error) = Error;
 }

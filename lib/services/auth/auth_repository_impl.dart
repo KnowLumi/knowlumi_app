@@ -35,6 +35,10 @@ class AuthRepository implements IAuthRepo {
     final user = _firebaseAuth.currentUser!;
     final userId = user.uid;
 
+    final userDataDocSnap =
+        await _firestore.collection('LumiUserData').doc(userId).get();
+    final userData = UserDataDto.fromJson(userDataDocSnap.data()!);
+
     try {
       switch (role) {
         case UserType.creator:
@@ -47,9 +51,17 @@ class AuthRepository implements IAuthRepo {
             tmsUpdate: currentTms,
           );
 
-          await _firestore.collection("LumiCreators").doc(userId).set(
-                lumiCreator.toJson(),
-              );
+          _firestore
+            ..collection("LumiCreators").doc(userId).set(
+                  lumiCreator.toJson(),
+                )
+            ..collection("LumiUserData").doc(userId).update(
+                  userData
+                      .copyWith(
+                        role: 'creator',
+                      )
+                      .toJson(),
+                );
           return right(lumiCreator.toDomain());
         case UserType.student:
           final lumiStudent = LumiStudentDto(
@@ -61,9 +73,18 @@ class AuthRepository implements IAuthRepo {
             tmsUpdate: currentTms,
             interestedTopics: interestedTopics ?? [],
           );
-          await _firestore.collection("LumiStudents").doc(userId).set(
-                lumiStudent.toJson(),
-              );
+
+          _firestore
+            ..collection("LumiStudents").doc(userId).set(
+                  lumiStudent.toJson(),
+                )
+            ..collection("LumiUserData").doc(userId).update(
+                  userData
+                      .copyWith(
+                        role: 'student',
+                      )
+                      .toJson(),
+                );
           return right(lumiStudent.toDomain());
       }
     } on FirebaseException catch (_) {

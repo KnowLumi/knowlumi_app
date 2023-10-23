@@ -65,6 +65,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   AuthState _switchUserState(LumiUser user) {
+    print(user);
     return switch (user) {
       NotRegistered() => const AuthState.toRegister(),
       LumiCreator creator => AuthState.creator(user: creator),

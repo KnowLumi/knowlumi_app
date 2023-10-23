@@ -1,0 +1,22 @@
+{
+  "lumiCourses": [
+    {
+      "id": "id123",
+      "isPublished": false,
+      "creatorId": "7qwaO0pvERX493Tp0qNR6pSR4w82",
+      "curriculumId": "123id",
+      "courseType": "String",
+      "isPaid": false,
+      "amount": null,
+      "courseName": "Course Title",
+      "description": "Course Description",
+      "previewImageUrl": null,
+      "previewVideoUrl": null,
+      "syllabusPdfUrl": null,
+      "whatsappUrl": null,
+      "studentsEnrolled": 0,
+      "tmsCreate": 1696870444000,
+      "tmsUpdate": 1696870444000
+    }
+  ]
+}

@@ -9,7 +9,8 @@ class CrtCourseState with _$CrtCourseState {
   const factory CrtCourseState.allCourse(
     List<LumiCourseTypeWrapper> courseWrappers,
   ) = AllCourse;
-  const factory CrtCourseState.created() = Created;
+  const factory CrtCourseState.created(LumiCourseTypeWrapper courseWrapper) =
+      Created;
   const factory CrtCourseState.updated() = Updated;
   const factory CrtCourseState.deleted() = Deleted;
 }

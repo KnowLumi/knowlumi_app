@@ -18,7 +18,7 @@ class RegisterPage extends StatelessWidget {
           orElse: () {},
           creator: (creator) {
             context.router.replace(
-              CreatorHomeRoute(creator: creator),
+              CreatorMainRoute(creator: creator),
             );
           },
 
@@ -40,10 +40,11 @@ class RegisterPage extends StatelessWidget {
                 child: Text("Creator"),
               ),
               ElevatedButton(
-                  onPressed: () {
-                    context.router.push(const SelectTopicsRoute());
-                  },
-                  child: Text("Student")),
+                onPressed: () {
+                  context.router.push(const SelectTopicsRoute());
+                },
+                child: Text("Student"),
+              ),
             ],
           ),
         ),

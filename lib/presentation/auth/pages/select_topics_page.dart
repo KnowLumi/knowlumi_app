@@ -20,7 +20,7 @@ class SelectTopicsPage extends StatelessWidget {
             context.router
               ..popUntilRoot()
               ..replace(
-                StudentHomeRoute(student: student),
+                StudentMainRoute(student: student),
               );
           },
           // todo: Handle Student Register Failure
