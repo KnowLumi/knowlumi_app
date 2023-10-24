@@ -39,8 +39,6 @@ class CoursePref {
     required Map<String, dynamic> newCourse,
     required Map<String, dynamic> newCurriculum,
   }) async {
-    print("creating --> $newCourse : $newCurriculum");
-
     await Future.wait([
       _createHelper(_courseKey, newCourse),
       _createHelper(_curriculumKey, newCurriculum),
@@ -54,8 +52,6 @@ class CoursePref {
     final allElements = _getValue(key);
 
     allElements.add(newElement);
-
-    print("all lmns --> $allElements");
     await _setValue(key, allElements);
   }
 

@@ -1,26 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:dartz/dartz.dart';
-import 'package:injectable/injectable.dart';
 
 import '../../core/utils/date_time_utils.dart';
 import '../../domain/auth/auth_failures.dart';
 import '../../domain/auth/i_auth_repo.dart';
 import '../../domain/auth/lumi_user.dart';
+import '../core/service_providers.dart';
 import 'lumi_user_dto.dart';
 
-@LazySingleton(as: IAuthRepo)
 class AuthRepository implements IAuthRepo {
-  final FirebaseAuth _firebaseAuth;
-  final GoogleSignIn _googleSignIn;
-  final FirebaseFirestore _firestore;
+  final ProviderRef ref;
+  AuthRepository(this.ref);
 
-  AuthRepository(this._firebaseAuth, this._firestore, this._googleSignIn);
+  FirebaseAuth get _auth => ref.watch(fireAuthProvider);
+  FirebaseFirestore get _firestore => ref.watch(firestoreProvider);
+  GoogleSignIn get _googleSignIn => ref.watch(googleSignInProvider);
 
   @override
   Future<Option<LumiUser>> getSignedInUser() async {
-    final user = _firebaseAuth.currentUser;
+    final user = _auth.currentUser;
 
     if (user == null) return none();
 
@@ -32,7 +33,7 @@ class AuthRepository implements IAuthRepo {
     required UserType role,
     List<String>? interestedTopics,
   }) async {
-    final user = _firebaseAuth.currentUser!;
+    final user = _auth.currentUser!;
     final userId = user.uid;
 
     final userDataDocSnap =
@@ -105,7 +106,7 @@ class AuthRepository implements IAuthRepo {
         idToken: googleAuthentication.idToken,
         accessToken: googleAuthentication.accessToken,
       );
-      final cred = await _firebaseAuth.signInWithCredential(authCredential);
+      final cred = await _auth.signInWithCredential(authCredential);
 
       final userId = cred.user!.uid;
 

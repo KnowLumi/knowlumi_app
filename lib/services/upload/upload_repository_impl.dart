@@ -2,17 +2,14 @@ import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:injectable/injectable.dart';
 import 'package:mime/mime.dart';
 
-import '../../domain/upload/upload_failure.dart';
 import '../../domain/course/lumi_curriculum.dart';
 import '../../domain/upload/file_data.dart';
 import '../../domain/upload/file_pick_failure.dart';
 import '../../domain/upload/i_upload_repo.dart';
 import '../../domain/upload/upload_data.dart';
 
-@LazySingleton(as: IUploadRepo)
 class UploadRepository implements IUploadRepo {
   @override
   Future<Either<FilePickFailure, Option<FileData>>> pickContent(

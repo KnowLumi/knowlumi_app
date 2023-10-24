@@ -1,9 +1,15 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../services/creator/course/crt_course_impl.dart';
 import '../../course/lumi_course_type_wrapper.dart';
 import '../../course/lumi_course.dart';
 import '../../course/lumi_curriculum.dart';
 import 'crt_course_failures.dart';
+
+final crtCourseRepoProvider = Provider<ICrtCourseRepo>(
+  (ref) => CrtCourseRepository(ref),
+);
 
 abstract interface class ICrtCourseRepo {
   Future<Either<CrtCourseFailure, List<LumiCourseTypeWrapper>>> getAllCourses();

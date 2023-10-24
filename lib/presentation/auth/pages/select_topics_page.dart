@@ -1,20 +1,21 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../application/auth/auth_provider.dart';
 import '../../core/routes/app_router.dart';
-import '../../../application/auth/auth_bloc.dart';
 import '../../../domain/auth/lumi_user.dart';
 
 @RoutePage()
-class SelectTopicsPage extends StatelessWidget {
+class SelectTopicsPage extends ConsumerWidget {
   const SelectTopicsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        state.maybeWhen(
+  Widget build(BuildContext context, ref) {
+    ref.listen(
+      authenticationProvider,
+      (previous, next) {
+        next.maybeWhen(
           orElse: () {},
           student: (student) {
             context.router
@@ -27,24 +28,22 @@ class SelectTopicsPage extends StatelessWidget {
           failure: (message) {},
         );
       },
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                BlocProvider.of<AuthBloc>(context).add(
-                  AuthEvent.registerUser(
-                    role: UserType.student,
-                    interestedTopics: ['Technology', 'Science'],
-                  ),
-                );
-              },
-              child: Text("Done"),
-            ),
-          ],
-        ),
+    );
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              ref.read(authenticationProvider.notifier).registerUser(
+                role: UserType.student,
+                interestedTopics: ['Tech', 'Science'],
+              );
+            },
+            child: Text("Done"),
+          ),
+        ],
       ),
     );
   }
