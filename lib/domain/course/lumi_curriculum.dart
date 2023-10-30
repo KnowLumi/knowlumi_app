@@ -18,12 +18,22 @@ extension ValueX on ContentType {
 
 @freezed
 class LumiCurriculum with _$LumiCurriculum {
+  const LumiCurriculum._();
+
   const factory LumiCurriculum({
     String? id,
     List<Section>? sections,
     int? tmsCreate,
     int? tmsUpdate,
   }) = _LumiCurriculum;
+
+  factory LumiCurriculum.empty() => const LumiCurriculum(
+        sections: [
+          Section(
+            lessons: [],
+          ),
+        ],
+      );
 }
 
 @freezed

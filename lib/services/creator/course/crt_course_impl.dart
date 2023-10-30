@@ -222,10 +222,8 @@ class CrtCourseRepository implements ICrtCourseRepo {
   }) async {
     try {
       // ! Test //
-      await _courseCache.deleteCourse(
-        courseId: courseId,
-        curriculumId: curriculumId,
-      );
+      _allCourses.removeWhere((element) => element.course.id == courseId);
+      print(_allCourses.length);
 
       return none();
       //! Test //

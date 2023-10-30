@@ -25,7 +25,7 @@ class EnterCourseInfoPage extends ConsumerWidget {
             print("Failure Occurred");
           },
           created: (courseWrapper) {
-            context.router.push(
+            context.router.replace(
               AddCurriculumRoute(courseWrapper: courseWrapper),
             );
           },

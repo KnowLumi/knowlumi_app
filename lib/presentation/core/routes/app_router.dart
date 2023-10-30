@@ -8,7 +8,9 @@ import '../../auth/pages/select_topics_page.dart';
 import '../../auth/pages/sign_in_page.dart';
 import '../../creator/course_creation/pages/add_curriculum_page.dart';
 import '../../creator/course_creation/pages/enter_course_info_page.dart';
+import '../../creator/course_creation/pages/lesson_creation_page.dart';
 import '../../creator/creator_main_page.dart';
+import '../../creator/home/pages/all_courses_page.dart';
 import '../../creator/home/pages/creator_home_page.dart';
 import '../../creator/home/pages/empty_course_page.dart';
 import '../../creator/profile/pages/creator_profile_page.dart';
@@ -40,8 +42,10 @@ class AppRouter extends _$AppRouter {
         ]),
 
         AutoRoute(page: EmptyCourseRoute.page),
+        AutoRoute(page: AllCoursesRoute.page),
         AutoRoute(page: EnterCourseInfoRoute.page),
         AutoRoute(page: AddCurriculumRoute.page),
+        AutoRoute(page: LessonCreationRoute.page),
 
         // * Student Pages
         AutoRoute(page: StudentMainRoute.page),

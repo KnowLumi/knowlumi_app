@@ -4,6 +4,8 @@ part 'lumi_course.freezed.dart';
 
 @freezed
 class LumiCourse with _$LumiCourse {
+  const LumiCourse._();
+
   const factory LumiCourse({
     String? id,
     String? creatorId,
@@ -21,4 +23,6 @@ class LumiCourse with _$LumiCourse {
     int? tmsCreate,
     int? tmsUpdate,
   }) = _LumiCourse;
+
+  factory LumiCourse.empty() => const LumiCourse();
 }

@@ -9,7 +9,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Future.wait([
-    initDependencies(),
+    initCache(),
     Firebase.initializeApp(),
   ]);
 
