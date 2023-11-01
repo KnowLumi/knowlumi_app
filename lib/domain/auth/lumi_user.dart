@@ -10,8 +10,8 @@ enum UserType {
 @freezed
 class UserData with _$UserData {
   const factory UserData({
-    required String uid,
-    required UserType role,
+    String? uid,
+    UserType? role,
   }) = _UserData;
 }
 
@@ -20,53 +20,53 @@ sealed class LumiUser with _$LumiUser {
   const factory LumiUser.notRegistered() = NotRegistered;
 
   const factory LumiUser.lumiCreator({
-    required String id,
-    required String firstName,
-    required String lastName,
-    required String email,
-    required String phoneNumber,
-    required String employmentType,
-    required String about,
-    required String photoUrl,
-    required String websiteUrl,
-    required String instagramUrl,
-    required String linkedInUrl,
-    required String youtubeUrl,
-    required String refId,
-    required int tmsCreate,
-    required int tmsUpdate,
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? phoneNumber,
+    String? employmentType,
+    String? about,
+    String? photoUrl,
+    String? websiteUrl,
+    String? instagramUrl,
+    String? linkedInUrl,
+    String? youtubeUrl,
+    String? refId,
+    int? tmsCreate,
+    int? tmsUpdate,
   }) = LumiCreator;
 
   const factory LumiUser.lumiStudent({
-    required String id,
-    required String firstName,
-    required String lastName,
-    required String email,
-    required String phoneNumber,
-    required String photoUrl,
-    required String refId,
-    required List<String> interestedTopics,
-    required List<String> wishListedCourses,
-    required List<ApprovedCourse> accessibleCourses,
-    required List<EnrolledCourse> enrolledCourses,
-    required int tmsCreate,
-    required int tmsUpdate,
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? phoneNumber,
+    String? photoUrl,
+    String? refId,
+    List<String>? interestedTopics,
+    List<String>? wishListedCourses,
+    List<ApprovedCourse>? accessibleCourses,
+    List<EnrolledCourse>? enrolledCourses,
+    int? tmsCreate,
+    int? tmsUpdate,
   }) = LumiStudent;
 }
 
 @freezed
 class ApprovedCourse with _$ApprovedCourse {
   const factory ApprovedCourse({
-    required String courseId,
-    required String accessId,
-    required String refId,
+    String? courseId,
+    String? accessId,
+    String? refId,
   }) = _ApprovedCourse;
 }
 
 @freezed
 class EnrolledCourse with _$EnrolledCourse {
   const factory EnrolledCourse({
-    required String id,
-    required String tmsEnroll,
+    String? id,
+    String? tmsEnroll,
   }) = _EnrolledCourse;
 }

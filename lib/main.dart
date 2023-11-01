@@ -1,41 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:knowlumi_app/presentation/core/start_up.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'application/auth/auth_bloc.dart';
-import 'injection.dart';
+import 'presentation/core/entry/my_app.dart';
+import 'init_dependencies.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  await Future.wait([
+    initCache(),
+    Firebase.initializeApp(),
+  ]);
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => getIt<AuthBloc>()
-            ..add(
-              const AuthEvent.authCheckRequested(),
-            ),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Knowlumi App',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const StartUpPage(),
-      ),
-    );
-  }
+  runApp(
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
