@@ -27,7 +27,7 @@ class CrtCourseRepository implements ICrtCourseRepo {
   FirebaseAuth get _auth => ref.watch(fireAuthProvider);
   CoursePref get _courseCache => ref.watch(courseCacheProvider);
 
-  List<LumiCourseTypeWrapper> _allCourses = [];
+  final List<LumiCourseTypeWrapper> _allCourses = [];
 
   String get creatorId => _auth.currentUser!.uid;
 
